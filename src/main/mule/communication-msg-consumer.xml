@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:jms="http://www.mulesoft.org/schema/mule/jms" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd">
+	<flow name="communication-msg-consumerFlow" doc:id="cdd78ce3-51b7-456e-a9da-ae47dd3273ef" >
+		<jms:listener doc:name="On New Message" doc:id="ac5110e9-af4b-46e6-a793-4b4a5fbea32a" config-ref="JMS_Config" destination="communication-Msgs">
+			<jms:consumer-type >
+				<jms:queue-consumer />
+			</jms:consumer-type>
+		</jms:listener>
+		<logger level="INFO" doc:name="Logger" doc:id="c9426917-c5c4-4524-b0b6-e97f67ebcdc4" message="---------------Message------------------#[payload]"/>
+	</flow>
+</mule>

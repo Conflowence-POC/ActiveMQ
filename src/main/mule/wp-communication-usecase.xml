@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:jms="http://www.mulesoft.org/schema/mule/jms"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/jms http://www.mulesoft.org/schema/mule/jms/current/mule-jms.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="a904506b-4775-4000-ad8c-0c8736342348" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<jms:config name="JMS_Config" doc:name="JMS Config" doc:id="7d79112e-f62e-40d1-9217-093c0f1ac0e6" >
+		<jms:active-mq-connection username="admin" password="admin" >
+			<jms:factory-configuration brokerUrl="tcp://win-dev-2:61616" />
+		</jms:active-mq-connection>
+	</jms:config>
+	<flow name="wp-communication-usecaseFlow" doc:id="c10996fc-2a25-461f-a7d4-8b234f6d8ceb" >
+		<http:listener doc:name="Listener" doc:id="51c22fd2-ab59-4f4a-ac0f-da30e5d735fd" config-ref="HTTP_Listener_config" path="/jms/sendmsg"/>
+		<jms:publish doc:name="Publish" doc:id="c8eecbc5-7956-4ac9-adc2-4e255ff9c653" config-ref="JMS_Config" destination="communication-Msgs"/>
+		<ee:transform doc:name="Transform Message" doc:id="5b318319-b7da-4eeb-a927-c892b5bee3c0" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+"Message send to queue is success"]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+	</flow>
+</mule>
